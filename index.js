@@ -4,13 +4,20 @@ const axios = require('axios');
 
 class IntranetManager {
 
-	async requestToken(option) {
+	option = {
+		host: "https://api.runtheons.com",
+		url: "/login",
+		method: "CONNECT"
+	};
+
+	async requestToken(serverName, option) {
+		Object.assign(this.option, option);
 		return new Promise((resolve, reject) => {
 			try {
 				const keys = await this._generateKeyPair();
 
 				const encryptToken = await this._sendRequest({
-					host: option.host,
+					server: serverName,
 					key: keys.publicKey
 				})
 
@@ -50,20 +57,20 @@ class IntranetManager {
 		});
 	}
 
-	_sendRequest({ host, url, method, key, server }) {
+	async _sendRequest({ key, server }) {
 		return new Promise((resolve, reject) => {
 			axios({
-				method: method,
-				url: host + url,
+				method: this.option.method,
+				url: this.option.host + this.option.url,
 				data: {
 					publicKey: key,
 					server: server
 				}
 			}).then(response => {
-				return resolve(response)
+				return resolve(response.data.token);
 			}).catch(err => {
-				return reject(response)
-			})
+				return reject(response);
+			});
 		});
 	}
 
