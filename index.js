@@ -23,7 +23,7 @@ class IntranetManager {
 
 				const privateKey = new NodeRSA(keys.privateKey);
 
-				const token = privateKey.decrypt(encryptToken);
+				const token = privateKey.decrypt(encryptToken, 'utf8');
 
 				return resolve(token);
 			} catch (e) {
@@ -76,7 +76,7 @@ class IntranetManager {
 
 	cryptPayload(payload, publicKey) {
 		const key = new NodeRSA(publicKey);
-		var encryptedPayload = key.encrypt(payload);
+		var encryptedPayload = key.encrypt(payload, 'base64');
 		return encryptedPayload;
 	}
 
