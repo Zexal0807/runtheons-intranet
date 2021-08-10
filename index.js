@@ -6,8 +6,8 @@ class IntranetManager {
 
 	option = {
 		host: "https://api.runtheons.com",
-		url: "/login",
-		method: "CONNECT"
+		url: "/intranet/login",
+		method: "PUT"
 	};
 
 	async requestToken(serverName, option) {
