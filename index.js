@@ -1,9 +1,29 @@
+const NodeRSA = require('node-rsa');
 const { generateKeyPair } = require('crypto');
 const axios = require('axios');
 
 class IntranetManager {
 
+	async requestToken(option) {
+		return new Promise((resolve, reject) => {
+			try {
+				const keys = await this._generateKeyPair();
 
+				const encryptToken = await this._sendRequest({
+					host: option.host,
+					key: keys.publicKey
+				})
+
+				const privateKey = new NodeRSA(keys.privateKey);
+
+				const token = privateKey.decrypt(encryptToken);
+
+				return resolve(token);
+			} catch (e) {
+				return reject(e);
+			}
+		});
+	}
 
 	async _generateKeyPair() {
 		return new Promise((resolve, reject) => {
