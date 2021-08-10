@@ -65,9 +65,14 @@ class IntranetManager {
 					server: server
 				}
 			}).then(response => {
-				return resolve(response.data.token);
+				var body = response.data;
+				if (body.status) {
+					return resolve(body.data.token);
+				} else {
+					return reject(body)
+				}
 			}).catch(err => {
-				return reject(response);
+				return reject(err);
 			});
 		});
 	}
