@@ -28,6 +28,23 @@ class IntranetManager {
 		});
 	}
 
+	_sendRequest({ host, url, method, key, server }) {
+		return new Promise((resolve, reject) => {
+			axios({
+				method: method,
+				url: host + url,
+				data: {
+					publicKey: key,
+					server: server
+				}
+			}).then(response => {
+				return resolve(response)
+			}).catch(err => {
+				return reject(response)
+			})
+		});
+	}
+
 }
 
 module.exports = new IntranetManager();
