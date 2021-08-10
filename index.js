@@ -10,9 +10,9 @@ class IntranetManager {
 		method: "PUT"
 	};
 
-	async requestToken(serverName, option) {
+	requestToken(serverName, option) {
 		Object.assign(this.option, option);
-		return new Promise((resolve, reject) => {
+		return new Promise(async(resolve, reject) => {
 			try {
 				const keys = await this._generateKeyPair();
 
