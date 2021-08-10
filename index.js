@@ -42,9 +42,7 @@ class IntranetManager {
 				},
 				privateKeyEncoding: {
 					type: 'pkcs8',
-					format: 'pem',
-					cipher: 'aes-256-cbc',
-					passphrase: 'top secret'
+					format: 'pem'
 				}
 			}, (err, publicKey, privateKey) => {
 				if (err)
