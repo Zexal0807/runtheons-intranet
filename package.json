@@ -1,0 +1,21 @@
+{
+	"name": "@runtheons/intranet",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"dependencies": {
+		"node-rsa": "^1.1.1"
+	},
+	"devDependencies": {},
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Zexal0807/runtheons-intranet.git"
+	},
+	"author": "Zexal0807",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Zexal0807/runtheons-intranet/issues"
+	},
+	"homepage": "https://github.com/Zexal0807/runtheons-intranet#readme"
+}
