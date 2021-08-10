@@ -74,6 +74,12 @@ class IntranetManager {
 		});
 	}
 
+	cryptPayload(payload, publicKey) {
+		const key = new NodeRSA(publicKey);
+		var encryptedPayload = key.encrypt(payload);
+		return encryptedPayload;
+	}
+
 }
 
 module.exports = new IntranetManager();
