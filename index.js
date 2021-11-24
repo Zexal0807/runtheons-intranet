@@ -3,11 +3,11 @@ const { generateKeyPair } = require('crypto');
 const axios = require('axios');
 
 class IntranetManager {
-
 	option = {
-		host: "https://api.runtheons.com",
-		url: "/intranet/login",
-		method: "PUT"
+		host: 'https://api.runtheons.com',
+		url: '/intranet/login',
+		method: 'PUT',
+		session: {}
 	};
 
 	requestToken(serverName, option) {
@@ -19,7 +19,7 @@ class IntranetManager {
 				const encryptToken = await this._sendRequest({
 					server: serverName,
 					key: keys.publicKey
-				})
+				});
 
 				const privateKey = new NodeRSA(keys.privateKey);
 
@@ -34,46 +34,51 @@ class IntranetManager {
 
 	async _generateKeyPair() {
 		return new Promise((resolve, reject) => {
-			generateKeyPair('rsa', {
-				modulusLength: 4096,
-				publicKeyEncoding: {
-					type: 'spki',
-					format: 'pem'
+			generateKeyPair(
+				'rsa', {
+					modulusLength: 4096,
+					publicKeyEncoding: {
+						type: 'spki',
+						format: 'pem'
+					},
+					privateKeyEncoding: {
+						type: 'pkcs8',
+						format: 'pem'
+					}
 				},
-				privateKeyEncoding: {
-					type: 'pkcs8',
-					format: 'pem'
+				(err, publicKey, privateKey) => {
+					if (err) return rejects(err);
+					return resolve({
+						publicKey: publicKey,
+						privateKey: privateKey
+					});
 				}
-			}, (err, publicKey, privateKey) => {
-				if (err)
-					return rejects(err)
-				return resolve({
-					publicKey: publicKey,
-					privateKey: privateKey
-				});
-			});
+			);
 		});
 	}
 
 	async _sendRequest({ key, server }) {
 		return new Promise((resolve, reject) => {
 			axios({
-				method: this.option.method,
-				url: this.option.host + this.option.url,
-				data: {
-					publicKey: key,
-					server: server
-				}
-			}).then(response => {
-				var body = response.data;
-				if (body.status) {
-					return resolve(body.data.token);
-				} else {
-					return reject(body)
-				}
-			}).catch(err => {
-				return reject(err);
-			});
+					method: this.option.method,
+					url: this.option.host + this.option.url,
+					data: {
+						publicKey: key,
+						server: server,
+						session: this.option.session
+					}
+				})
+				.then((response) => {
+					var body = response.data;
+					if (body.status) {
+						return resolve(body.data.token);
+					} else {
+						return reject(body);
+					}
+				})
+				.catch((err) => {
+					return reject(err);
+				});
 		});
 	}
 
@@ -82,7 +87,6 @@ class IntranetManager {
 		var encryptedPayload = key.encrypt(payload, 'base64');
 		return encryptedPayload;
 	}
-
 }
 
 module.exports = new IntranetManager();
